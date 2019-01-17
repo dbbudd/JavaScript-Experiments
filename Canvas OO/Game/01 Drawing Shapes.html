@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Canvas</title>
+	
+</head>
+<body >
+	<canvas id="canvas"></canvas>
+	<script>
+	var context = document.getElementById('canvas').getContext('2d');
+	canvas.width = 204;
+	canvas.height = 224;
+        
+	//Create a Sprite class
+	function Sprite(x, y, width, height, colour){
+	    this.x = x;
+	    this.y = y;
+	    this.width = width;
+	    this.height = height;
+	    this.colour = colour;
+	    
+	    this.DrawSprite = function(){
+		context.fillStyle = colour;
+		context.fillRect(x, y, width, height)
+	    };
+	}
+	
+	//Create a new instance of Sprite object
+	var Player = new Sprite(200, 200, 50, 50, '#c00');
+	var Enemy = new Sprite(300, 300, 50, 50, '#000');
+	
+	//Draw the Player and Enemy
+	Player.DrawSprite();
+	Enemy.DrawSprite();
+	
+	window.onload = function() {
+	    var canvas = document.createElemet('canvas');
+	    ctx = canvas.getContext('2d');
+	    
+	    canvas.width = 204;
+	    canvas.height = 224;
+	    
+	    var body = document.getElementsByTagName('body')[0];
+	    body.appendChild(canvas);
+	    
+	    ctx.lineWidth = 2;
+	    ctx.strokeStyle = 'black';
+	    ctx.strokeRect(2, 20, canvas.width - 4, canvas.height - 24);
+	};
+	
+	</script>
+</body>
+</html>
+
+
+

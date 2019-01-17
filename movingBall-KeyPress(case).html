@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+      <title>Javascript</title>
+      
+      	
+     	<script>
+      	 	var canvas, context;
+		  	var ball_x, ball_y;
+		  	var dx, dy;
+		  	var moveUp, moveDown, moveLeft, moveRight;
+			var mouseDown, touchDown;
+			var moves = [];
+			
+			//add array of values for key presses
+			var KEY = {LEFT:37, UP:38, RIGHT:39, DOWN:40};
+			var DIRECTION = {UP:0, DOWN:1, LEFT:2, RIGHT:3, OPPOSITE:[1, 0, 3, 2]}
+ 			
+ 			function StartGame()
+			{
+			      setupGame();
+			      intervalId = setInterval(playGame, 5);
+			}
+ 		
+ 		
+ 			function StopGame()
+      	  	{
+      	  		clearInterval(intervalId);
+      	  	}
+ 			
+ 			function setupGame()
+ 			{
+ 				canvas = document.getElementById("canvas");
+				c = canvas.getContext("2d");
+				ball_x = 200;
+				ball_y = 200;
+				dx = 5;
+				dy = 5;
+				moveUp = false;
+				moveDown = false;
+				moveLeft = false;
+				moveRight = false;
+				mouseDown = false;
+				touchDown = false;
+				
+				window.addEventListener("keydown", onKeyDown, false);
+				window.addEventListener("keyup", onKeyUp, false);
+ 			}
+ 			
+ 			function playGame()
+ 			{
+ 				c.clearRect(0, 0, canvas.width, canvas.height);
+ 				drawBall();
+ 				
+ 			}
+ 			
+ 			function drawBall()
+ 			{
+			      c.beginPath();
+			      c.arc(ball_x, ball_y, 15, 0, 2 * Math.PI, false);
+			      c.fillStyle = "red";
+			      c.fill();
+			      
+			      // the below has been moved to the case statement in onKeyDown()
+			      /*
+			      if (moveLeft == true){ball_x -= dx;}
+			      else if (moveRight == true){ball_x += dx;}
+			      else if (moveUp == true){ball_y += dy;}
+			      else if (moveDown == true){ball_y -= dy;}
+			      */
+ 			}
+ 			
+ 			function onKeyDown(evt)
+ 			{
+			      var handled = false;
+			      switch(evt.keyCode){
+				    case KEY.LEFT: move(DIRECTION.LEFT); handled = true; ball_x -= dx; break;
+				    case KEY.RIGHT: move(DIRECTION.RIGHT); handled = true; ball_x += dx; break;
+				    case KEY.UP: move(DIRECTION.UP); handled = true; ball_y += dy; break;
+				    case KEY.DOWN: move(DIRECTION.DOWN); handled = true; ball_y -= dy; break;
+				}
+				
+				if (handled == true) {
+				    evt.preventDefault(); // prevent arrow keys from scrolling the page
+				}
+				
+				
+ 			}
+ 			
+ 			function onKeyUp(evt)
+ 			{
+ 				switch(evt.keyCode){
+				    case KEY.LEFT: move(DIRECTION.LEFT); break;
+				    case KEY.RIGHT: move(DIRECTION.RIGHT); break;
+				    case KEY.UP: move(DIRECTION.UP); break;
+				    case KEY.DOWN: move(DIRECTION.DOWN); break;
+				}
+ 			}
+			
+			function move(where) {
+			      
+			      
+			      
+			      var current = where;
+			      var previous = moves[moves.length-2];
+			      
+			      
+			      if (current != previous) {
+				    moves.push(where)
+				    console.log("Previous: " + previous.toString())
+				    console.log("Current: " + current.toString())
+			      }
+			      else if (current == previous) {
+				    console.log("Same-sies")
+			      }
+			      
+			      console.log(moves.toString())
+			};
+ 		
+ 		
+ 		</script>
+ 
+ 
+ 
+ 
+ <body>
+    	
+     		<canvas id="canvas" height="400px" width="400px" style="border:1px solid"></canvas>
+			<br />
+			<button onclick="StartGame()">Start</button>
+			<button onclick="StopGame()">Stop</button>
+      
+   		 </body>
+ </html>

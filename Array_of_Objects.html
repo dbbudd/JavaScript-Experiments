@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Adding to an Array of Objects</title>
+    <script type="text/javascript">
+	   function printingObjects()
+	   {
+		   //define an object	   
+		   var students = {name: "Fred", weight: 80};
+		   
+		   document.getElementById("content").innerHTML = JSON.stringify(students.name);
+		   document.prompt("adasdas");
+		   /*
+		   //the loop below will prompt the user for 6 Names and Heights
+		   var i = 0;
+		   while (i <= 3){
+			   //Prompt the user for inputs
+			   var newName = prompt("Add a Name #" + (i+1));
+			   var newScore = prompt("Add a Height #" + (i+1));
+			   
+			   //for testing so you don't need to enter them
+			   //var newName = "Student" + 1;
+			   //var newScore = i + 1;
+			   
+			   //Add the names to the object
+			   students.push({name: newName, height: newScore});
+			   
+			   //count plus one
+			   i++;
+		   
+		   }
+		   
+		   
+		      
+		   //loop to add the six heights to an array
+		   //depending on how you do your sort you may not need this
+		   
+			var n = 0;
+			var arr = [];
+			while (n <= 5){
+				arr.push(students[n].height);
+				n++;
+			}
+			
+			//print out the six items in the array
+			document.getElementById("content").innerHTML = arr;
+			*/
+	   }
+    </script>
+</head>
+
+<body onLoad="printingObjects()">
+<div id="content">
+<input id="inputbox" type="text" value="" />
+</div>
+
+
+</body>
+</html>

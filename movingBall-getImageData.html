@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+    
+    <script>
+      (function () {
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame;
+})();
+
+//========================= B E G I N =======================================
+
+window.onload = function init() {
+
+    var canvas = document.getElementById("canvas");
+    var c = canvas.getContext("2d");
+
+    canvas.width = 600;
+    canvas.height = 600;
+
+    render();
+}
+
+//======================== O B J E C T S =====================================
+
+var player = {
+    x: 50,
+    y: 50,
+    xvel: 0,
+    yvel: 0,
+}
+
+//===================== I N P U T & A D J U S T ============================
+
+var keys = [];
+
+window.addEventListener("keydown",function(e) {
+    keys[e.keyCode] = true;
+});
+
+window.addEventListener("keyup",function(e) {
+    keys[e.keyCode] = false;
+});
+
+function input() {
+
+    if (keys[37]) {
+        player.xvel -= 5
+    }
+    if (keys[39]) {
+        player.xvel += 5
+    }
+    if (keys[38]) {
+        player.yvel -= 5
+    }
+    if (keys[40]) {
+        player.yvel += 5
+    }
+
+    player.x += player.xvel;
+    player.y += player.yvel;
+
+    player.xvel = 0;
+    player.yvel = 0;
+
+    collideTest();
+
+}
+
+//======================= C O L L I S I O N ================================
+
+function collideTest(){
+    var canvas = document.getElementById("canvas");
+    var c = canvas.getContext("2d");
+    var whatColor = c.getImageData(player.x - 5, player.y - 5,60,60);
+    for (var i = 0; i < whatColor.data.length; i += 4) {
+        if (whatColor.data[i] == 255) {
+            console.log("red");
+        }
+    }
+}
+
+//========================== R E N D E R ===================================
+
+function render(){
+
+    var canvas = document.getElementById("canvas");
+    var c = canvas.getContext("2d");
+
+    canvas.width = 600
+
+    input();
+
+    c.fillStyle = "red"
+	c.fillRect(300,300,50,50);
+	input()
+	
+	c.fillStyle = "rgb(106,8,136)"
+	c.fillRect(player.x,player.y,50,50)
+
+    requestAnimationFrame(render);
+}
+
+    </script>
+    
+  </head>
+  <body>
+    <canvas id="canvas" style="border:solid 5px rgb(255, 0, 0)"></canvas>
+    
+  </body>
+</html>   

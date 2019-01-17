@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<style>
+			  #canvas, table, td {
+				border: solid black 1px;
+			  }
+			</style>
+			<script>
+			  var canvas, context;
+			  var ball1, ball2;
+			  var intervalId;
+			  
+			  function Ball(x, y, radius, dx, dy, colour)
+			  {
+				this.x = x;
+				this.y = y;
+				this.radius = radius;
+				this.dx = dx;
+				this.dy = dy;
+				this.colour = colour;
+
+				this.change_xy = function()
+				{
+				  this.x += this.dx;
+				  this.y += this.dy;
+				}
+				
+				this.reverse_direction = function()
+				{
+				  this.reverse_dx();
+				  this.reverse_dy();
+				}
+				
+				this.reverse_dx = function()
+				{
+				  this.dx = -this.dx;
+				}
+				
+				this.reverse_dy = function()
+				{
+				  this.dy = -this.dy;
+				}
+
+				this.draw = function()
+				{
+				  drawCircle(this.x, this.y, this.radius, this.colour);
+				}
+				
+				this.animation = function()
+				{
+				  this.draw();
+				  this.checkEdgeOfCanvas();
+				  this.change_xy();
+				}
+				
+				this.checkEdgeOfCanvas = function()
+				{
+				  if (this.x > canvas.width - this.radius || this.x < this.radius)
+				  {
+					this.reverse_dx();
+				  }
+				  if (this.y > canvas.height - this.radius || this.y < this.radius)
+				  {
+					this.reverse_dy();
+				  }
+				}
+
+				this.checkCollision = function(other_ball)
+				{
+				  var dist_x = this.x - other_ball.x;
+				  var dist_y = this.y - other_ball.y;
+				  var square_dist = (dist_x * dist_x) + (dist_y * dist_y);
+				  
+				  if (square_dist <= (this.radius + other_ball.radius) * (this.radius + other_ball.radius))
+				  {
+					//console.log("changing direction");
+					//this.changeDirection_old(other_ball);
+					//this.changeDirection_newest(other_ball);
+					this.changeDirection_angle(other_ball);
+					//change_direction_new(this, other_ball);
+					this.change_xy();
+					other_ball.change_xy();
+				  }
+				}
+				
+				this.changeDirection_old = function(other_ball)
+				{
+					var new_dx = this.dx;
+					var new_dy = this.dy;
+					this.dx = other_ball.dx;
+					this.dy = other_ball.dy;
+					other_ball.dx = new_dx;
+					other_ball.dy = new_dy;
+				}
+				
+				this.changeDirection_newest = function(other_ball)
+				{
+				  var ux1 = this.dx;
+				  var uy1 = this.dy;
+				  var ux2 = other_ball.dx;
+				  var uy2 = other_ball.dy;
+				  var m1 = this.radius;
+				  var m2 = other_ball.radius;
+				  
+				  vx1 = ((m1 - m2)/(m1 + m2)) * ux1 + ((2 * m2)/(m1 + m2)) * ux2;
+				  vx2 = ((2 * m1)/(m1 + m2)) * ux1 + ((m2 - m1)/(m1 + m2)) * ux2;
+				  vy1 = ((m1 - m2)/(m1 + m2)) * uy1 + ((2 * m2)/(m1 + m2)) * uy2;
+				  vy2 = ((2 * m1)/(m1 + m2)) * uy1 + ((m2 - m1)/(m1 + m2)) * uy2;
+				  
+				  this.dx = vx1;
+				  this.dy = vy1;
+				  other_ball.dx = vx2;
+				  other_ball.dy = vy2;
+				}
+
+				this.changeDirection_angle = function(other_ball)
+				{
+				  console.log("change");
+				  var ux1 = this.dx;
+				  var uy1 = this.dy;
+				  var ux2 = other_ball.dx;
+				  var uy2 = other_ball.dy;
+				  var m1 = this.radius;
+				  var m2 = other_ball.radius;
+				  
+				  var dist_x = ux1 - ux2;
+				  var dist_y = uy1 - uy2;
+				  
+				  var collision_angle = Math.atan2(dist_y, dist_x);
+				  
+				  var u1 = Math.sqrt(ux1 * ux1 + uy1 * uy1);
+				  var u2 = Math.sqrt(ux2 * ux2 + uy2 * uy2);
+				  var direction1 = Math.atan2(uy1, ux1);
+				  var direction2 = Math.atan2(uy2, ux2);
+				  
+				  var nx1 = u1 * Math.cos(direction1 - collision_angle);
+				  var ny1 = u1 * Math.sin(direction1 - collision_angle);
+				  var nx2 = u2 * Math.cos(direction2 - collision_angle);
+				  var ny2 = u2 * Math.sin(direction2 - collision_angle);
+				  
+				  var fx1 = ((m1 - m2) * nx1 + (2 * m2) * nx2) / (m1 + m2);
+				  var fy1 = ny1;
+				  var fx2 = ((2 * m1) * nx1 + (m2 - m1) * nx2) / (m1 + m2);
+				  var fy2 = ny2;
+				  
+				  var vx1 = Math.cos(collision_angle) * fx1 + Math.cos(collision_angle + Math.PI/2) * fy1;
+				  var vy1 = Math.sin(collision_angle) * fx1 + Math.sin(collision_angle + Math.PI/2) * fy1;
+				  var vx2 = Math.cos(collision_angle) * fx2 + Math.cos(collision_angle + Math.PI/2) * fy2;
+				  var vy2 = Math.sin(collision_angle) * fx2 + Math.sin(collision_angle + Math.PI/2) * fy2;
+				  
+				  this.dx = vx1;
+				  this.dy = vy1;
+				  other_ball.dx = vx2;
+				  other_ball.dy = vy2;
+				}
+				
+				function change_direction_new(ball1, ball2)
+				{
+				  var new_dx = ball1.dx;
+				  var new_dy = ball1.dy;
+				  ball1.dx = ball2.dx;
+				  ball1.dy = ball2.dy;
+				  ball2.dx = new_dx;
+				  ball2.dy = new_dy;
+
+				  this.dx = (this.dx * (this.radius - other_ball.radius) + (2 * other_ball.radius * other_ball.dx))/(this.radius + other_ball.radius)
+				  this.dy = (this.dy * (this.radius - other_ball.radius) + (2 * other_ball.radius * other_ball.dy))/(this.radius + other_ball.radius)
+				  other_ball.dx = (other_ball.dx * (other_ball.radius - this.radius) + (2 * this.radius * this.dx))/(other_ball.radius + this.radius)
+				  other_ball.dy = (other_ball.dy * (other_ball.radius - this.radius) + (2 * this.radius * this.dy))/(other_ball.radius + this.radius)
+				}
+			  }
+
+			  function initialiseGlobals()
+			  {
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+				
+				ball1 = new Ball(50, 200, 30, 2, -4, "blue");
+				ball2 = new Ball(350, 200, 30, -2, 5, "red");
+			  }
+			  
+			  function drawCircle(x, y, radius, colour)
+			  {
+				context.beginPath();
+				context.fillStyle = colour;
+				context.arc(x, y, radius, 0, Math.PI * 2);
+				context.closePath();
+				context.fill();
+			  }
+			  
+			  function drawRectangle(x, y, w, h, colour)
+			  {
+				context.beginPath();
+				context.fillStyle = colour;
+				context.rect(x, y, w, h);
+				context.closePath();
+				context.fill();
+			  }
+					
+			  function clearCanvas()
+			  {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			  }
+		
+			  function startAnimation()
+  			  {
+				initialiseGlobals();
+				intervalId = setInterval(drawAnimation, 5);
+			  }
+			  
+			  function stopAnimation()
+			  {
+				clearInterval(intervalId);
+			  }
+			  
+			  var counter = 0;
+			  
+			  function drawAnimation()
+			  {
+				clearCanvas();
+				ball1.animation();
+				ball2.animation();
+				ball1.checkCollision(ball2);
+				var msg = "<table><tr><td>dx1</td><td>dy1</td><td>dx2</td><td>dy2</td></tr><tr>";
+				msg += "<td>" + ball1.dx + "</td>";
+				msg += "<td>" + ball1.dy + "</td>";
+				msg += "<td>" + ball2.dx + "</td>";
+				msg += "<td>" + ball2.dy + "</td>";
+				msg += "</tr></table>"
+				document.getElementById("stats").innerHTML = msg;
+			  }
+			</script>
+		</head>
+		<body>
+		  <div id="game">
+			<canvas id="canvas" height="400px" width="400px"></canvas>
+			<br />
+			<div id="stats"></div>
+			<button onclick="startAnimation()">Start Animation</button>
+			<button onclick="stopAnimation()">Stop Animation</button>
+		  </div>
+		</body>
+	</html>

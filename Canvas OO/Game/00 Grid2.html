@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+
+    </head>
+    <body style=" background: lightblue;">
+        <canvas id="canvas" width="420px" height="420px" style="background: #fff; margin:20px;"></canvas>
+        <script type="text/javascript" language="javascript">
+	    var kBoardWidth = 9;
+	    var kBoardHeight= 9;
+	    var kPieceWidth = 50;
+	    var kPieceHeight= 50;
+	    var kPixelWidth = 1 + (kBoardWidth * kPieceWidth)
+	    var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
+	    var gCanvasElement;
+	    var gDrawingContext;
+	    var gPattern;
+	    var gPieces;
+	    var gNumPieces;
+	    var gSelectedPieceIndex;
+	    var gSelectedPieceHasMoved;
+	    var gMoveCount;
+	    var gMoveCountElem;
+	    var gGameInProgress;
+	    
+	    
+	    function Cell(row, column){
+		this.row = row;
+		this.column = column;
+	    }
+	    
+	    function drawBoard(){
+		if (gGameInProgress && isTheGameOver()) {
+		    endGame();
+		}
+		
+		gDrawingContext.clearRect(0, 0, kPixelWidth, kPixelHeight);
+		gDrawingContext.beginPath();
+		
+		//Draw vertical lines
+		for (var x = 0; x <= kPixelWidth; x += kPieceWidth) {
+		    gDrawingContext.moveTo(0.5 + x, 0);
+		    gDrawingContext.lineTo(0.5 + x, kPixelHeight);
+		}
+		
+		//Draw horizontal lines
+		for (var y = 0; y <= kPixelHeight; y += kPieceHeight) {
+		    gDrawingContext.moveTo(0, 0.5 + y);
+		    gDrawingContext.lineTo(kPieceWidth, 0.5 + y);
+		}
+		
+		//Draw it
+		gDrawingContext.strokeStyle = "#ccc";
+		gDrawingContext.stroke();
+		
+		for (var i = 0; i <9; i++) {
+		    drawPiece(gPieces[i])
+		}
+	    }
+	    
+	    function newGame(){
+		gPieces = [new Cell(kBoardHeight - 3, 0),
+	    }
+	    
+
+    drawBoard();
+    </script>
+    </body>
+    </html>
+
+
+

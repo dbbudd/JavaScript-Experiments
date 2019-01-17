@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Probem 4</title>
+    </head>
+    <script>
+        function prob4()
+        {
+        var groupNum = prompt("How many students do you have?");
+        var i=0;
+        var n=1;
+        
+        var students = [];
+        
+        while (i < groupNum) {
+            var Newname = prompt("Student Nnumber " + n + "'s name");
+            var Newscore = prompt("Student Nnumber " + n + "'s test score");
+            students.push({name: Newname, score: Newscore})
+            i++
+            n++
+        }
+        
+        function bubbleSort(students)
+        {
+            var swapped;
+            do {
+                swapped = false;
+                for (var x=0; x < students.length-1; x++) {
+                    if (students[x].score > students[x+1].score) {
+                        var temp = students[x];
+                        students[x] = students[x+1];
+                        students[x+1] = temp;
+                        swapped = true;
+                        }
+                }
+                }
+                while (swapped);
+                return (students);
+                }
+                
+                var Newscore = bubbleSort(Newscore)
+                var n = 0;
+                var arr = [];
+				var newString = "";
+                while (n < groupNum) {
+					newString = " " + Newscore[n].name + ": " + Newscore[n].score + " ";
+					//arr.push(" " + Newscore[n].name + ": " + Newscore[n].score + " ")
+					arr.push(newString)
+                    n++
+                }
+                
+                document.getElementById("out").innerHTML = arr.toString();
+            }
+    </script>
+    <body id="out">
+          <button type="button" onclick="prob4()">Click me</button>
+    </body>
+</html>

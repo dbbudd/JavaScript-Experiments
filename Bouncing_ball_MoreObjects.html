@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+      <title>Javascript</title>
+      
+      	
+     	<script>
+      	  var canvas, context;
+		  var ball_x, ball_y;
+		  var dx, dy;
+    
+			
+		  function drawAnimation()
+      	  { //circle
+      	  	c.clearRect(0,0,canvas.width,canvas.height);
+      	   	c.beginPath();
+      	   	c.arc(ball_x, ball_y, 15, 0, 2 * Math.PI, false);
+      	   	c.fillStyle = 'green';
+      	   	c.fill();
+      	   	
+      	   	if (ball_x>385 || ball_x<15)
+      	   		{dx = 0-dx;}
+      	   	
+      	   	if (ball_y>385 || ball_y<15)
+      	   		{dy = 0-dy;}
+      	   	
+      	   	ball_x += dx;
+      	    ball_y += dy;
+      	    
+      
+      	 
+      	  //square
+      	  	c.clearRect(0,0,canvas.width,canvas.height);
+      	    c.beginPath;
+      	    c.rect(square_x, square_y, 15, 15);
+      	    c.fillStyle = 'blue';
+			c.fill();
+      	    
+      	    if (square_x>385 || square_x<15)
+      	    	{dx = 0-dx}
+      	    	
+      	    if (square_y>385 || square_y<15)
+      	    	{dy = 0-dy}
+      	    	
+      	    square_x += dx;
+      	    square_y += dy;
+      	  }
+			
+      	  function StartAnimation()
+      	   {
+      	    canvas = document.getElementById("canvas");
+			c = canvas.getContext("2d");
+
+			ball_x = 200;
+			ball_y = 200;
+			square_x = 225;
+			square_y = 225;
+			dx = 1;
+			dy = 2;
+			
+			intervalId = setInterval(drawAnimation, 5);
+      	    
+      	  }
+      	  
+      	  
+      	  
+      	  function StopAnimation()
+      	  {
+      	  clearInterval(intervalId, 10);
+      	  clearInterval(intervalId);
+      	  }
+
+     	</script>
+   	 	
+   		 <body>
+    	
+     		<canvas id="canvas" height="400px" width="400px" style="border:1px solid"></canvas>
+			<br />
+			<button onclick="StartAnimation()">Start</button>
+			<button onclick="StopAnimation()">Stop</button>
+      
+   		 </body>
+ </html>

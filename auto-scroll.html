@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="refresh" content="30" />
+<title>Untitled Document</title>
+<br />
+
+<script type="application/javascript">
+document.body.scrollTop == 0;
+function pageScroll(){
+	if (document.body.scrollTop < 1800){
+		window.scrollBy(0,1);
+		scrolldelay = setTimeout('pageScroll()', 20);
+	}
+	else{
+		window.scrollBy(0,-1);
+		scrolldelay = setTimeout('pageScroll()', 20);
+	}
+}
+</script>
+
+
+</head>
+
+<body onLoad="pageScroll()" >
+
+<iframe id="bulletin" height="2500px" width="100%;" src="http://bulletin.ccgs.wa.edu.au#view=fitH&zoom=50&toolbar=0&navpanes=0" scrolling="no">
+</iframe>
+
+
+</body>
+</html>

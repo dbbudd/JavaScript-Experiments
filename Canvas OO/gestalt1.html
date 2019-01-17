@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+
+    </head>
+    <body style=" background: lightblue;">
+        <canvas id="canvas" width="420px" height="420px" style="background: #fff; margin:20px;"></canvas>
+        <script type="text/javascript" language="javascript">
+    
+    var padding = 10;
+    var border_width = canvas.width - (padding * 2);
+    var border_height = canvas.height - (padding * 2);
+    var cell_width = border_width + (padding * 2) + 1;
+    var cell_height = border_height + (padding * 2) + 1;
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    
+    function drawBoard(){
+	for (var x = 0; x <= border_width; x += 40) {
+	    context.moveTo(0.5 + x + padding, padding);
+	    context.lineTo(0.5 + x + padding, border_height + padding);
+	    }
+	for (var x = 0; x <= border_height; x += 40) {
+	    context.moveTo(padding, 0.5 + x + padding);
+	    context.lineTo(border_width + padding, 0.5 + x + padding);
+	    }
+	context.strokeStyle = "black";
+	context.stroke();
+    }
+
+    drawBoard();
+    </script>
+    </body>
+    </html>
+
+
+

@@ -1,0 +1,306 @@
+<html lang="en">
+<head>
+    <title>The Prison</title>
+    <style>
+	background-image:url(Images/Blurry_Prison.jpg);
+        #canvas{
+            border: 150px #0000FF;
+			background-image:url(Images/Blurry_Prison.jpg);
+        };
+		#background{
+			background-image:url(bluewins.jpg);
+		};
+    </style>
+    <script>
+        var score1 = 0;
+        var score2 = 0;
+        var canvas, context;
+        var ball_y, ball_x;
+        var bat_x, bat_y, bat_x2, bat_y2;
+        var dx, dy, gx, gy;
+        var moveUp, moveDown;
+        var moveUp2, moveDown2;
+        var batwidth = 10;
+        var batlength = 75;
+        var batwidth2 = 10;
+        var batlength2 = 75;
+		var colour1 = "rgba(0, 100, 255, 5)";
+		var colour2 = "rgba(0, 255, 0, 5)";
+		var colourBall = "red";
+		var spell_x, spell_y;
+		var spellColour;
+		var sx, sy;
+       
+       function startGame(){
+            setupGame();
+			
+			if ((ball_x + 10 > bat_x)&&
+                (ball_x + 10 < bat_x + batwidth)&&
+                (ball_y + 10 > bat_y)&&
+                (ball_y + 10 < bat_y + batlength))
+            {
+                gx = -gx;
+				gx -= 10;
+            }
+			
+			if ((ball_x - 10 > bat_x2)&&
+                (ball_x - 10 < bat_x2 + batwidth)&&
+                (ball_y - 10 > bat_y2)&&
+                (ball_y - 10 < bat_y2 + batlength))
+            {
+                gx = -gx;
+				gx += 10;
+            }
+			
+            intervalId = setInterval(playGame,15)
+       
+       };
+       
+       function stopGame(){
+        clearInterval(intervalId)
+		score1 = 0
+		score2 = 0
+       };
+	   
+	   function greenWins(){
+		   context.font = "60px Gill Sans";
+			context.fillStyle = "green";
+            context.fillText("GREEN WINS",250,200);
+	   };
+	   
+	   function blueWins(){
+		   context.font = "60px Gill Sans";
+			context.fillStyle = "blue";
+            context.fillText("BLUE WINS",250,200);
+	   };
+	   
+	   function InvisiPong(){
+            setupGame();
+			colour1 = "rgba(255, 154, 0, 0)";
+			colour2 = "rgba(255, 154, 0, 0)";
+			gx = 2;
+			gy = 2;
+			
+			if (score1 == 5){
+				colour1 = "white"
+			};
+			if (score2 == 5){
+				colour2 = "white"
+			};
+			
+			if (score1 > 3){
+				colour2 = "rgba(255, 255, 255)"
+			};
+			if (score2 == 3){
+				colour1 = "rbga(255, 255, 255)"
+			};
+			if (score1 > 6){
+				batlength = 75
+				colour1 = "white"
+			};
+			if (score2 == 6){
+				batlength2 = 75
+				colour2 = "white"
+			};
+			
+            intervalId = setInterval(playGame,15)
+       
+       };
+       
+        function setupGame() {
+            canvas = document.getElementById("canvas");
+            context = canvas.getContext("2d");
+			
+			fivePoints = 0;
+			fivePoints2 = 0;
+        
+            bat_x = 765;
+            bat_y = 200;
+            
+            bat_x2 = 20;
+            bat_y2 = 200;
+            
+            ball_x = 400;
+            ball_y = 200;
+           
+            dx = 5;
+            dy = 5;
+            
+            gx = 4;
+            gy = 4;
+			
+			sx = 4;
+            sy = 4;
+			
+			spell_x = 300;
+			spell_y = 200;
+			
+			spellColour = "red"
+            
+            moveUp = false;
+            moveDown = false;
+
+            moveUp2 = false;
+            moveDown2 = false;
+            
+            
+            window.addEventListener("keydown", onKeyDown);
+            window.addEventListener("keyup", onKeyUp);
+            
+            window.addEventListener("keydown", onKeyDown2);
+            window.addEventListener("keyup", onKeyUp2);
+        };
+        
+        function onKeyDown(event){
+            
+            if (event.keyCode == 38) { moveUp = true; } // up arrow pressed
+            if (event.keyCode == 40) { moveDown = true; } // down arrow pressed
+        }
+
+        function onKeyUp(event){
+            
+            if (event.keyCode == 38) { moveUp = false; } // up arrow pressed
+            if (event.keyCode == 40) { moveDown = false; } // down arrow pressed
+        }
+        
+        function onKeyDown2(event){
+            
+            if (event.keyCode == 87) { moveUp2 = true; } // up arrow pressed
+            if (event.keyCode == 83) { moveDown2 = true; } // down arrow pressed
+        }
+
+        function onKeyUp2(event){
+            
+            if (event.keyCode == 87) { moveUp2 = false; } // up arrow pressed
+            if (event.keyCode == 83) { moveDown2 = false; } // down arrow pressed
+        }
+        
+        function playGame(){
+            context.clearRect(0,0,canvas.width,canvas.height);
+			
+            drawBall();
+			spellActivate();
+            
+            onKeyUp();
+            onKeyDown();
+            
+            onKeyUp2();
+            onKeyDown2();
+        };
+       
+       function drawBall(){
+        
+            context.beginPath();
+            context.rect(397.5,0,5,400)
+            context.fillStyle = "rgba(255, 154, 0, 0.5)";
+            context.fill();
+            context.closePath();
+            
+            context.beginPath();
+            context.rect(bat_x2,bat_y2,batwidth,batlength);
+            context.fillStyle = colour1;
+            context.fill();
+            context.closePath();
+
+            context.beginPath();
+            context.rect(bat_x,bat_y,batwidth2,batlength2);
+            context.fillStyle = colour2;
+            context.fill();
+            context.closePath();
+
+            context.beginPath();
+            context.arc(ball_x,ball_y,10,0,Math.PI * 2);
+            context.fillStyle = colourBall;
+            context.fill();
+            context.closePath();
+            
+            context.font = "60px Georgia";
+			context.fillStyle = "orange";
+            context.fillText(score1,327.5,50);
+            context.fillText(score2,437.5,50)
+			
+			
+			if (score2 == 10){
+				stopGame()
+				greenWins()
+			}
+			
+			if (score1 == 10){
+				stopGame()
+				blueWins()
+			}
+            
+            if ((ball_x + 10 > bat_x)&&
+                (ball_x + 10 < bat_x + batwidth)&&
+                (ball_y + 10 > bat_y)&&
+                (ball_y + 10 < bat_y + batlength))
+            {
+                gx = -gx
+				gx -= 0.5;
+				colourBall = "rgba(0, 255, 0, 5)"
+            }
+			
+			if ((ball_x - 10 > bat_x2)&&
+                (ball_x - 10 < bat_x2 + batwidth)&&
+                (ball_y - 10 > bat_y2)&&
+                (ball_y - 10 < bat_y2 + batlength))
+            {
+                gx = -gx
+				gx += 0.5;
+				colourBall = "rgba(0, 100, 255, 5)"
+            }
+			
+            if (ball_x > 780) {
+            score1 += 1
+			ball_x = 400
+            }
+            if (ball_x < 15) {
+            score2 += 1
+			ball_x = 400
+            }
+            
+            if (ball_y > 390 || ball_y < 10) {
+                gy = -gy
+            };
+
+            ball_x += gx;
+            ball_y += gy;
+            
+            if (bat_y <= 0) {
+                moveUp = false;
+            }
+
+            if (bat_y >= 325) {
+                moveDown = false;
+            }
+            
+            if (bat_y2 <= 0) {
+                moveUp2 = false;
+            }
+            if (bat_y2 >= 325) {
+                moveDown2 = false;
+            }
+            
+            if (moveUp == true) { bat_y -= dy;};
+            if (moveDown == true) { bat_y += dy;};
+            
+            if (moveUp2 == true) { bat_y2 -= dy;};
+            if (moveDown2 == true) { bat_y2 += dy;};
+            
+       };
+	     
+    </script>
+</head>
+<body bgcolor= "black">
+	<div>
+    <canvas id="canvas" height="400px" width="800px" text-align="center"></canvas>
+    
+    <br/><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;>
+    <&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;><&nbsp;>
+    
+    <button onClick="startGame()">Start Game/Difficulty</button>
+    <button onClick="InvisiPong()">InvisiPong</button>
+    <button onClick="stopGame()">Stop Game</button>
+    </div>
+</body>
+</html>

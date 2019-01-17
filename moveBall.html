@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<style>
+			  #canvas {
+				border: solid black 1px;
+			  }
+			</style>
+			<script>
+			  var canvas, context;
+			  var ball_x, ball_y;
+			  var dx, dy;
+			  var moveUp, moveDown, moveLeft, moveRight;
+			  var mouseDown, touchDown;
+			  
+			  function setupGame()
+			  {
+				initialiseVariables();
+				setUpEventHandlers();
+			  }
+			  
+			  function initialiseVariables()
+			  {
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+				
+				ball_x = 200;
+				ball_y = 200;
+				dx = 5;
+				dy = 5;
+				
+				moveUp = false;
+				moveDown = false;
+				moveLeft = false;
+				moveRight = false;
+				mouseDown = false;
+				touchDown = false;
+			  }
+
+			  function setUpEventHandlers()
+			  {
+				window.addEventListener("keydown", onKeyDown);
+				window.addEventListener("keyup", onKeyUp);
+				window.addEventListener("mousedown", onMouseDown);
+				window.addEventListener("mousemove", onMouseMove);
+				window.addEventListener("mouseup", onMouseUp);
+				window.addEventListener("touchstart", onTouchStart);
+				window.addEventListener("touchmove", onTouchMove);
+				window.addEventListener("touchend", onTouchEnd);
+			  }
+			  
+			  function onKeyDown(evt)
+			  {
+				if (evt.keyCode == 37) { moveLeft = true; }
+				if (evt.keyCode == 38) { moveUp = true; }
+				if (evt.keyCode == 39) { moveRight = true; }
+				if (evt.keyCode == 40) { moveDown = true; }
+				//switch (evt.keyCode)
+				//{
+				//	case 37: // left arrow
+				//		moveLeft = true;
+				//		break;
+				//	case 38: // up arrow
+				//		moveUp = true;
+				//		break;
+				//	case 39: // right arrow
+				//		moveRight = true;
+				//		break;
+				//	case 40: // down arrow
+				//		moveDown = true;
+				//		break;
+				//	default: // any other key
+				//		break;
+				//}
+			  }
+			  
+			  function onKeyUp(evt)
+			  {
+				switch (evt.keyCode)
+				{
+					case 37: // left arrow
+						moveLeft = false;
+						break;
+					case 38: // up arrow
+						moveUp = false;
+						break;
+					case 39: // right arrow
+						moveRight = false;
+						break;
+					case 40: // down arrow
+						moveDown = false;
+						break;
+					default: // any other key
+						break;
+				}
+			  }
+			  
+			  function onMouseDown(evt)
+			  {
+				mouseDown = true;
+			  }
+			  
+			  function onMouseUp(evt)
+			  {
+				mouseDown = false;
+			  }
+			  
+			  function onMouseMove(evt)
+			  {
+				if (mouseDown == true && onCanvas(evt))
+				{
+				  updateBallPosition(evt);
+				}
+			  }
+
+			  function onTouchStart(evt)
+			  {
+				touchDown = true;
+			  }
+			  
+			  function onTouchEnd(evt)
+			  {
+				touchDown = false;
+			  }
+			  
+			  function onTouchMove(evt)
+			  {
+				evt.preventDefault();
+				if (touchDown == true && onCanvas(evt))
+				{
+				  updateBallPosition(evt);
+				}
+			  }
+			  
+			  function onCanvas(evt)
+			  {
+				//return true;
+				if (evt.pageX > canvas.offsetLeft && evt.pageX < canvas.offsetLeft + canvas.width
+				&&  evt.pageY > canvas.offsetTop && evt.pageY < canvas.offsetTop + canvas.height)
+				{
+				  return true;
+				}
+				else
+				{
+				  return false;
+				}
+			  }
+
+			  function updateBallPosition(evt)
+			  {
+			  	ball_x = evt.pageX - canvas.offsetLeft;
+				ball_y = evt.pageY - canvas.offsetTop;
+			  }
+			  
+			  function drawBall(x, y, radius, colour)
+			  {
+				if (moveLeft == true) { ball_x -= dx; }
+				if (moveRight == true) { ball_x += dx; }
+				if (moveUp == true) { ball_y -= dy; }
+				if (moveDown == true) { ball_y += dy; }
+				drawCircle(ball_x, ball_y, 15, "red");
+			  }
+			  
+			  function drawCircle(x, y, radius, colour)
+			  {
+				context.beginPath();
+				context.fillStyle = colour;
+				context.arc(x, y, radius, 0, Math.PI * 2);
+				context.closePath();
+				context.fill();
+			  }
+			  
+			  function clearCanvas()
+			  {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			  }
+		
+			  function startGame()
+  			  {
+				setupGame();
+				intervalId = setInterval(playGame, 15);
+			  }
+			  
+			  function stopGame()
+			  {
+				clearInterval(intervalId);
+			  }
+			  
+			  function playGame()
+			  {
+				clearCanvas();
+				drawBall();
+			  }
+
+			</script>
+		</head>
+		<body>
+		  <div id="game">
+			<div style="height: 100px">div</div>
+			<canvas id="canvas" height="400px" width="400px"></canvas>
+			<br />
+			<button onclick="startGame()">Start Game</button>
+			<button onclick="stopGame()">Stop Game</button>
+		  </div>
+		</body>
+	</html>

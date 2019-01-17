@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<style>
+			  #canvas {
+				border: solid black 1px;
+			  }
+			</style>
+			<script>
+			  var canvas, context;
+			  var balls;
+			  var num_balls;
+			  var intervalId;
+			  
+			  function Ball(x, y, radius, dx, dy, colour)
+			  {
+				this.x = x;
+				this.y = y;
+				this.radius = radius;
+				this.dx = dx;
+				this.dy = dy;
+				this.colour = colour;
+
+				this.change_xy = function()
+				{
+				  this.x += this.dx;
+				  this.y += this.dy;
+				}
+				
+				this.draw = function()
+				{
+				  drawCircle(this.x, this.y, this.radius, this.colour);
+				}
+				
+				this.animation = function()
+				{
+				  this.draw();
+				  this.checkEdgeOfCanvas();
+				  this.change_xy();
+				}
+				
+				this.checkEdgeOfCanvas = function()
+				{
+				  if (this.x > canvas.width - this.radius || this.x < this.radius)
+				  {
+					this.dx = -this.dx;
+				  }
+				  if (this.y > canvas.height - this.radius || this.y < this.radius)
+				  {
+					this.dy = -this.dy;
+				  }
+				}
+
+				this.checkCollision = function(other_ball)
+				{
+				  var dist_x = this.x - other_ball.x;
+				  var dist_y = this.y - other_ball.y;
+				  var square_dist = (dist_x * dist_x) + (dist_y * dist_y);
+				  
+				  if (square_dist <= (this.radius + other_ball.radius) * (this.radius + other_ball.radius))
+				  {
+					this.changeDirection(other_ball);
+					this.change_xy();
+					other_ball.change_xy();
+				  }
+				}
+				
+				this.changeDirection = function(other_ball)
+				{
+				  console.log("change");
+				  var ux1 = this.dx;
+				  var uy1 = this.dy;
+				  var ux2 = other_ball.dx;
+				  var uy2 = other_ball.dy;
+				  var m1 = this.radius;
+				  var m2 = other_ball.radius;
+				  
+				  var dist_x = ux1 - ux2;
+				  var dist_y = uy1 - uy2;
+				  
+				  var collision_angle = Math.atan2(dist_y, dist_x);
+				  
+				  var u1 = Math.sqrt(ux1 * ux1 + uy1 * uy1);
+				  var u2 = Math.sqrt(ux2 * ux2 + uy2 * uy2);
+				  var direction1 = Math.atan2(uy1, ux1);
+				  var direction2 = Math.atan2(uy2, ux2);
+				  
+				  var nx1 = u1 * Math.cos(direction1 - collision_angle);
+				  var ny1 = u1 * Math.sin(direction1 - collision_angle);
+				  var nx2 = u2 * Math.cos(direction2 - collision_angle);
+				  var ny2 = u2 * Math.sin(direction2 - collision_angle);
+				  
+				  var fx1 = ((m1 - m2) * nx1 + (2 * m2) * nx2) / (m1 + m2);
+				  var fy1 = ny1;
+				  var fx2 = ((2 * m1) * nx1 + (m2 - m1) * nx2) / (m1 + m2);
+				  var fy2 = ny2;
+				  
+				  var vx1 = Math.cos(collision_angle) * fx1 + Math.cos(collision_angle + Math.PI/2) * fy1;
+				  var vy1 = Math.sin(collision_angle) * fx1 + Math.sin(collision_angle + Math.PI/2) * fy1;
+				  var vx2 = Math.cos(collision_angle) * fx2 + Math.cos(collision_angle + Math.PI/2) * fy2;
+				  var vy2 = Math.sin(collision_angle) * fx2 + Math.sin(collision_angle + Math.PI/2) * fy2;
+				  
+				  this.dx = vx1;
+				  this.dy = vy1;
+				  other_ball.dx = vx2;
+				  other_ball.dy = vy2;
+				}
+			  }
+
+			  function initialiseGlobals()
+			  {
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+				
+				balls = new Array();
+				num_balls = document.getElementById("num_balls").value;;
+				
+				// Create a number of random balls
+				for (var i = 0; i < num_balls; i++)
+				{
+				  var start_x = getRandomInt(50, canvas.width - 50);
+				  var start_y = getRandomInt(50, canvas.height - 50);
+				  var radius = getRandomInt(10, 35);
+				  var start_dx = getRandomPositiveOrNegative(5);
+				  var start_dy = getRandomPositiveOrNegative(5);
+				  var colour = getRandomColour();
+
+				  balls[i] = new Ball(start_x, start_y, radius, start_dx, start_dy, colour);
+				  console.log(start_x, start_y, radius, start_dx, start_dy, colour);
+				}
+			  }
+			  
+			  function getRandomColour()
+			  {
+				var red = getRandomInt(0, 255).toString();
+				var green = getRandomInt(0, 255).toString();
+				var blue = getRandomInt(0, 255).toString();
+				return "rgb(" + red + ", " + green + ", " + blue + ")";
+			  }
+			  
+			  function getRandomPositiveOrNegative(num)
+			  {
+				var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+			    return (Math.random() * num) + 1;
+			  }
+			  
+			  function getRandomInt (min, max)
+			  {
+			    return Math.floor(Math.random() * (max - min + 1)) + min;
+			  }
+			  
+			  function drawCircle(x, y, radius, colour)
+			  {
+				context.beginPath();
+				context.fillStyle = colour;
+				context.arc(x, y, radius, 0, Math.PI * 2);
+				context.closePath();
+				context.fill();
+			  }
+			  
+			  function clearCanvas()
+			  {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			  }
+		
+			  function startAnimation()
+  			  {
+				initialiseGlobals();
+				intervalId = setInterval(drawAnimation, 10);
+			  }
+			  
+			  function stopAnimation()
+			  {
+				clearInterval(intervalId);
+			  }
+			  
+			  function drawAnimation()
+			  {
+				clearCanvas();
+				for (var i = 0; i < num_balls; i++)
+				{
+				  balls[i].animation();
+				}
+				checkCollisions();
+			  }
+			  
+			  function checkCollisions()
+			  {
+				for (var i = 0; i < num_balls; i++)
+				{
+				  for (var j = i + 1; j < num_balls; j++)
+				  {
+					balls[i].checkCollision(balls[j]);
+				  }
+				}
+			  }
+			  
+			</script>
+		</head>
+		<body>
+		  <div id="game">
+			<canvas id="canvas" height="600px" width="600px"></canvas>
+			<br />
+			<input id="num_balls" type="number" min="2" max="100">
+			<button onclick="startAnimation()">Start Animation</button>
+			<button onclick="stopAnimation()">Stop Animation</button>
+		  </div>
+		</body>
+	</html>

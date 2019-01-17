@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<style>
+			  #canvas {
+				border: solid black 1px;
+			  }
+			</style>
+			<script>
+			  var canvas, context;
+			  var ball_x, ball_y;
+			  var dx, dy;
+			  var intervalId;
+			  var acceleration;
+
+			  function initialiseGlobals()
+			  {
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+				
+				ball_x = 200;
+				ball_y = 200;
+				dx = -2;
+				dy = 1;
+				acceleration = 0.01;
+			  }
+			  
+			  function drawCircle(x, y, radius, colour)
+			  {
+				context.beginPath();
+				context.fillStyle = colour;
+				context.arc(x, y, radius, 0, Math.PI * 2);
+				context.closePath();
+				context.fill();
+			  }
+			  
+			  function drawRectangle(x, y, w, h, colour)
+			  {
+				context.beginPath();
+				context.fillStyle = colour;
+				context.rect(x, y, w, h);
+				context.closePath();
+				context.fill();
+			  }
+					
+			  function clearCanvas()
+			  {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			  }
+		
+			  function startAnimation()
+  			{
+				initialiseGlobals();
+				intervalId = setInterval(drawAnimation, 15);
+			  }
+			  
+			  function stopAnimation()
+			  {
+				clearInterval(intervalId);
+			  }
+			  
+			  function drawAnimation()
+			  {
+				clearCanvas();
+				drawCircle(ball_x, ball_y, 15, "green");
+				console.log(ball_x, ball_y);
+				
+				// Bounce ball off walls
+				if (ball_x > canvas.width - 15 || ball_x < 15)
+				{
+				  dx = -dx;
+				}
+				if (ball_y > canvas.height - 15 || ball_y < 15)
+				{
+				  dy = -dy;
+				}
+
+				ball_x += dx;
+				ball_y += dy;
+				
+				//accelerate_ball();
+			  }
+			  
+			  function accelerate_ball()
+			  {
+				var velocity = Math.sqrt(dx * dx + dy * dy);
+				
+				velocity += acceleration;
+				
+				var angle = Math.atan2(dy, dx);
+				dx = Math.cos(angle) * velocity;
+				dy = Math.sin(angle) * velocity;
+			  }
+
+			</script>
+		</head>
+		<body>
+		  <div id="game">
+			<canvas id="canvas" height="400px" width="400px"></canvas>
+			<br />
+			<button onclick="startAnimation()">Start Animation</button>
+			<button onclick="stopAnimation()">Stop Animation</button>
+		  </div>
+		</body>
+	</html>

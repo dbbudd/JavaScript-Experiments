@@ -1,0 +1,55 @@
+<!doctype html>
+    <head>
+        <title>Probem 4</title>
+    </head>
+    <script>
+	function Prob4()
+		{
+			var groupNum = prompt("How many students are there?");
+			var students = [];
+			var i= 0;
+			var n = 0;
+			
+			while (i < groupNum) 
+			{
+				var Newname = prompt("Student Number " + n + "'s name");
+				var Newscore = prompt("Student Number " + n + "'s test score");
+				students.push({name: Newname, score: Newscore})
+				i++
+				n++
+			}
+				
+			var x=1;
+			var z=0;
+				
+			while (x<groupNum)
+			{
+				var Newstudents = [];
+				var current = students[0].score;
+				var challenger = students[1].score;
+				if (current > challenger) 
+				{
+					Newstudents.push({name: students[0].name, score: students[0].score})
+					x++
+				}
+			}
+			document.getElementById("out").innerHTML=Newstudents[groupNum];
+		}
+		
+		function listScores() {
+                var numStudents = prompt("How many students is there?");
+                var studentScores = [];
+                x = 0
+                while (x < numStudents) {
+                    newName = prompt("Name")
+                    newScore = prompt("Score")
+                    studentScores.push({name: newName, score: newScore})
+                    x = x + 1
+					}
+		}
+    </script>
+    <body>
+          <button type="button" onclick="Prob4()">Click me</button>
+          <p id="out"></p>
+    </body>
+</html>

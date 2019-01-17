@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>Task 5 Problem 4</title>
+	<script type="text/javascript">
+            function order() {
+                var studentNumber = prompt("How many students are there in the class?");
+                var students = [];
+                var x = 0;
+                while (x < studentNumber) {
+                    var studentName = prompt("Name: ");
+                    var studentScore = prompt("Score: ");
+                    students.push({name: studentName, score: studentScore});
+                    x = x + 1;
+                };
+             	     
+		function bubbleSort(a) {
+		    var swapped;
+		    do {
+			swapped = false;
+		        for (var i = 0; i < a.length - 1; i++) {
+			    if (a[i].score > a[i+1].score) {
+				var temp = a[i];
+				    a[i] = a[i+1];
+				    a[i+1] = temp;
+				    swapped = true;
+			    }
+			}
+		    } while (swapped) {
+			return(a);
+		    }
+		}
+                
+		var students = bubbleSort(students);
+		                
+                var z = 0;
+                var array = [];
+                while (z < studentNumber) {
+                    array.push("<br/> " + students[z].name + ": " + students[z].score + "");
+                    z++;
+                };
+                
+		document.getElementById("header").innerHTML = ("-Score Rankings-");				
+		document.getElementById("content").innerHTML = (array + "<br/>");
+                
+            };
+        </script>
+    </head>
+    <body>
+        <div id="header">
+	</div>
+	<div id="content">
+	</div>
+	<br/>
+        <button onclick="order()">Enter Scores</button>
+    </body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<style>
+			  #canvas {
+				border: solid black 1px;
+			  }
+			</style>
+			<script>
+			  var canvas, context;
+			  var ball1, ball2;
+			  var intervalId;
+			  
+			  function Ball(x, y, radius, dx, dy, colour)
+			  {
+				this.x = x;
+				this.y = y;
+				this.radius = radius;
+				this.dx = dx;
+				this.dy = dy;
+				this.colour = colour;
+
+				this.change_xy = function()
+				{
+				  this.x += this.dx;
+				  this.y += this.dy;
+				}
+				
+				this.reverse_direction = function()
+				{
+				  this.reverse_dx();
+				  this.reverse_dy();
+				}
+				
+				this.reverse_dx = function()
+				{
+				  this.dx = -this.dx;
+				}
+				
+				this.reverse_dy = function()
+				{
+				  this.dy = -this.dy;
+				}
+
+				this.draw = function()
+				{
+				  context.beginPath();
+				  context.fillStyle = this.colour;
+				  context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+				  context.fill();
+				}
+				
+				this.animation = function()
+				{
+				  this.draw();
+				  this.checkEdgeOfCanvas();
+				  this.change_xy();
+				}
+				
+				this.checkEdgeOfCanvas = function()
+				{
+				  if (this.x > canvas.width - this.radius || this.x < this.radius)
+				  {
+					this.reverse_dx();
+				  }
+				  if (this.y > canvas.height - this.radius || this.y < this.radius)
+				  {
+					this.reverse_dy();
+				  }
+				}
+			  }
+
+			  function initialiseGlobals()
+			  {
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+				
+				ball1 = new Ball(100, 100, 30, 3, 9, "blue");
+				ball2 = new Ball(300, 300, 30, -5, -10, "red");
+			  }
+			  
+			  function clearCanvas()
+			  {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			  }
+		
+			  function startAnimation()
+  			  {
+				initialiseGlobals();
+				intervalId = setInterval(drawAnimation, 20);
+			  }
+			  
+			  function stopAnimation()
+			  {
+				clearInterval(intervalId);
+			  }
+			  
+			  function drawAnimation()
+			  {
+				clearCanvas();
+				ball1.animation();
+				ball2.animation();
+				checkCollision();
+			  }
+			  
+			  function checkCollision()
+			  {
+				var dist_x = ball1.x - ball2.x;
+				var dist_y = ball1.y - ball2.y;
+				var dist = Math.sqrt((dist_x * dist_x) + (dist_y * dist_y));
+				
+				if (dist <= ball1.radius + ball2.radius)
+				{
+				  ball1.reverse_direction();
+				  ball2.reverse_direction();
+				}
+			  }
+
+			</script>
+		</head>
+		<body>
+		  <div id="game">
+			<canvas id="canvas" height="400px" width="400px"></canvas>
+			<br />
+			<button onclick="startAnimation()">Start Animation</button>
+			<button onclick="stopAnimation()">Stop Animation</button>
+		  </div>
+		</body>
+	</html>

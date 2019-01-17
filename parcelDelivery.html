@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Parcel Delivery</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var parcelDelivery = function parcelDelivery() {
+                var parcel = prompt("How much does your parcel weight?", "2kg");
+                if ((parcel >= 2.5) && (parcel <= 5)) {
+                    var price = parcel * 2.85
+                } else if (parcel > 5) {
+                    var price = parcel * 2.45
+				  } else {
+                    var price = parcel * 3.5
+                }
+                document.getElementById("h2").innerHTML = ("The parcel weighs " + parcel + ".");
+                document.getElementById("h2.2").innerHTML = ("This will cost $" + price + " to deliver.");
+            }
+        </script>
+        <button onClick="parcelDelivery()">Click Me</button>
+        <h2 id="h2"></h2>
+        <h2 id="h2.2"></h2>
+    </body>
+</html>

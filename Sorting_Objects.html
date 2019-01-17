@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Sorting Objects</title>
+    <script type="text/javascript">
+	   function printingObjects()
+	   {
+		   //define an object	   
+		   var students = [];
+		   
+		   //the loop below will prompt the user for 6 Names and Heights
+		   var numStudents = prompt("How many students?");
+		   var i = 0;
+		   var num = numStudents - 1
+		   
+		   while (i <= num){
+			   //Prompt the user for inputs
+			   var newName = prompt("Add a Name #" + (i+1));
+			   var newScore = prompt("Add a Height #" + (i+1));
+			   
+			   //Add the names to the object
+			   students.push({name: newName, height: newScore});
+			   
+			   //count plus one
+			   i++;
+		   }
+		   
+		   students.sort(function(a, b){
+			   return b.height-a.height
+		   })
+		   
+		      
+		   //loop to add the six heights to an array
+			var n = 0;
+			var arr = [];
+			while (n <= num){
+				arr.push(" " + students[n].name + ": " + students[n].height + " ");
+				n++;
+			}
+			var tallest = "<p> The tallest student is - </br>" + arr[0] + "</p>";
+			var shortest = "<p> The shortest student is - </br>" + arr[num] + "</p>";
+			
+			//Print out the six items in the array
+			document.getElementById("content").innerHTML = arr + tallest + shortest;
+			
+	   }
+    </script>
+</head>
+
+<body onLoad="printingObjects()">
+<div id="content">
+
+</div>
+
+
+</body>
+</html>

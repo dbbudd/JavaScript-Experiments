@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+	<html>
+	<head>
+		<script>
+			var canvas, context;
+			var ball_x,ball_y;
+			var dx,dy;
+			var moveUp, moveDown, moveLeft, moveRight;
+			var mouseDown, touchDown;
+			
+			function startGame()
+			{
+				setupGame();
+				intervalId = setInterval(playGame,15);
+			}
+			
+			function setupGame()
+			{
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+				ball_x = 200;
+				ball_y = 200;
+				dx = 5;
+				dy = 5;
+				var uagent = navigator.userAgent.toLowerCase();
+				if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1)
+					{
+						ball2_x = 100;
+						ball2_y = 100;
+						d2x = 5;
+						d2y = 5;
+					}
+				moveUp = false;
+				moveDown = false;
+				moveLeft = false;
+				moveRight = false;
+				mouseDown = false;
+				touchDown = false;
+				window.addEventListener("keydown",onKeyDown);
+				window.addEventListener("keyup",onKeyUp);
+				window.addEventListener("mousedown",onMouseDown);
+				window.addEventListener("mousemove",onMouseMove);
+				window.addEventListener("mouseup",onMouseUp);	
+				window.addEventListener("touchstart",onTouchStart);
+				window.addEventListener("touchmove",onTouchMove);
+				window.addEventListener("touchend",onTouchEnd);							
+			}
+			
+			function onMouseDown(event)
+			{
+				if (event.pageX <= 400 && event.pageY <= 400)
+				{	console.log("Mouse Down");
+					mouseDown = true;
+				}
+			}
+			
+			function onMouseMove(event)
+			{
+				if (mouseDown == true)
+				{
+					console.log("Mouse moving");
+					if (15 < (event.pageX - canvas.offsetLeft) && (event.pageX - canvas.offsetLeft) < 400-15)
+					{
+						ball_x = event.pageX - canvas.offsetLeft;
+					}
+					if (15 < (event.pageY - canvas.offsetLeft) && (event.pageY - canvas.offsetLeft) < 400-15)
+					{
+						ball_y = event.pageY - canvas.offsetTop;
+					}
+				}
+			}
+			
+			function  onMouseUp(event)
+			{
+				console.log("Mouse released");
+				mouseDown = false;
+			}
+
+			function onTouchStart(event)
+			{
+				if (event.pageX <= 400 && event.pageY <= 400)
+				{
+					console.log("Touch Down");
+					touchDown = true;
+				}
+			}
+			
+			function onTouchMove(event)
+			{
+				event.preventDefault();
+				if (touchDown == true)
+				{
+					console.log("Touch moving");
+					for (var i =0; i <event.touches.length; i++)
+					{
+						if (i > 1)
+						{
+							break;
+						}
+						
+						var touch = event.touches[i];
+						if (15 < (touch.pageX - canvas.offsetLeft) && (touch.pageX - canvas.offsetLeft) < 400-15)
+						{
+							var tomovex = touch.pageX - canvas.offsetLeft;
+							if (i == 0)
+								{
+									ball_x = tomovex;
+								}
+							if (i == 1)
+								{
+									ball2_x = tomovex;
+								}
+						}
+						if (15 < (touch.pageY - canvas.offsetLeft) && (touch.pageY - canvas.offsetLeft) < 400-15)
+						{
+							var tomovey = touch.pageY - canvas.offsetTop;
+							if (i == 0)
+								{
+									ball_y = tomovey;
+								}
+							if (i == 1)
+								{
+									ball2_y = tomovey;
+								}
+						}
+					}
+				}
+			}
+			
+			function  onTouchEnd(event)
+			{
+				console.log("Touch released");
+				touchDown = false;
+			}
+			
+			function onKeyDown(event)
+			{
+				console.log("Key Pressed");
+				if (event.keyCode == 37) {moveLeft = true; } // left arrow pressed
+				if (event.keyCode == 38) {moveUp = true; }  // up arrow pressed
+				if (event.keyCode == 39) {moveRight = true; } // right arrow pressed
+				if (event.keyCode == 40) {moveDown = true; } // down arrow pressed
+			}
+			
+			function onKeyUp(event)
+			{
+				console.log("Key Released");
+				if (event.keyCode == 37) {moveLeft = false; } // left arrow released
+				if (event.keyCode == 38) {moveUp = false; }  // up arrow released
+				if (event.keyCode == 39) {moveRight = false; } // right arrow released
+				if (event.keyCode == 40) {moveDown = false; } // down arrow released
+			}
+			
+			
+			function playGame()
+			{
+				context.clearRect(0,0,canvas.width,canvas.height);
+				drawBall()
+			}
+			
+			function drawBall()
+			{
+				context.beginPath();
+				context.arc(ball_x,ball_y,15,0,Math.PI*2, 'red)');
+				context.fillStyle = 'red';
+				context.fill();
+				var uagent = navigator.userAgent.toLowerCase();
+				if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1)
+					{
+						context.beginPath();
+						context.arc(ball2_x,ball2_y,15,0,Math.PI*2, 'blue)');
+						context.fillStyle = 'blue';
+						context.fill();
+					}
+				if (moveLeft == true && ball_x - dx > 15) {ball_x -= dx;}
+				if (moveRight == true && ball_x + dx < 400-15) {ball_x += dx;}
+				if (moveUp == true && ball_y - dy > 15) {ball_y -= dy;}
+				if (moveDown == true && ball_y + dy < 400-15) {ball_y += dy;}
+			}
+			
+
+			function stopGame()
+			{
+				clearInterval(intervalId);
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id ="canvas" height = "400px" width = "400px"
+		style = "border:1px solid #000000;"></canvas>
+		<br/>
+		<button onclick="startGame()">Start
+		<br/>
+		<button onclick="stopGame()">Stop
+	</body>
+	</html>
+	

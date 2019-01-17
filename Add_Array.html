@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Adding to an Array</title>
+    <script type="text/javascript">
+       function printingArrays()
+	   {
+		 //initialise array
+        var arr = [
+          "Hi",
+          "Hello",
+          "Bonjour"
+        ];
+        
+       var entry = prompt("Please enter a greating") 
+		//append new value to the array
+        arr.push(entry);
+		
+    	document.getElementById("content").innerHTML = arr;
+
+	   }
+    </script>
+</head>
+
+<body onLoad="printingObjects()">
+<div id="content">
+
+</div>
+
+
+</body>
+</html>

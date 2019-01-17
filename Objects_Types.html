@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Object Types</title>
+    <script type="text/javascript">
+	   function Person(firstname, surname, age, weight)
+	   {
+		   this.firstname = firstname;
+		   this.surname = surname;
+		   this.age = age;
+		   this.weight = weight;
+		};
+		
+		//object method allows all objects to invoke method
+		Person.prototype.speak = function()
+		{
+			document.getElementById("content").innerHTML = "Howdy, my name is " + this.firstname;
+		}
+		
+		
+		Person.prototype.DOB = function()
+		{
+			var Date = 2014 - this.age;
+			document.getElementById("content").innerHTML = Date;
+		}
+		
+		function printingObjects(){
+			var Father = new Person("John", "Smith", 45, 80);
+			var Mother = new Person("Jane", "Smith", 39, 60);
+			document.getElementById("content").innerHTML = Father.firstname;
+			document.getElementById("content").innerHTML = Mother.DOB;
+			Mother.DOB();
+			
+		}
+    </script>
+</head>
+
+<body onLoad="printingObjects()">
+<div id="content">
+</div>
+
+
+</body>
+</html>

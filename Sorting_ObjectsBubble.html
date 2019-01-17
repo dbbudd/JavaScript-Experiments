@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <script>
+            function listScores() {
+                var numStudents = prompt("How many students is there?")
+                var studentScores = []
+                x = 0
+                while (x < numStudents) {
+                    newName = prompt("Name")
+                    newScore = prompt("Score")
+                    studentScores.push({name: newName, score: newScore})
+                    x = x + 1
+                }
+		
+                
+		function bubbleSort(a)
+		{
+		    var swapped;
+		    do {
+			swapped = false;
+			for (var i=0; i < a.length-1; i++) {
+			    if (a[i].score > a[i+1].score) {
+				var temp = a[i];
+				a[i] = a[i+1];
+				a[i+1] = temp;
+				swapped = true;
+			    }
+			}
+		    } while (swapped)
+			return(a)
+		}
+		
+		var studentScores = bubbleSort(studentScores)
+		
+                var n = 0;
+                var arr = [];
+                while (n < numStudents) {
+                    arr.push(" " + studentScores[n].name + ": " + studentScores[n].score + " ");
+                    n++;
+                }
+                
+                document.getElementById("body").innerHTML = arr
+            }
+        </script>
+    </head>
+    <body id = 'body' onLoad='listScores()'></body>
+</html>
